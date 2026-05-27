@@ -36,4 +36,4 @@ yargs(hideBin(process.argv))
     type:"string"
   })},revertRepo)
 
-  .demandCommand(1,"You Need At Least One Command").help().argv;
+.demandCommand(1,"You Need At Least One Command").help().argv;

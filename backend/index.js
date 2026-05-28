@@ -26,7 +26,9 @@ yargs(hideBin(process.argv))
   yargs.positional("message",{
     describe:"Commit Message",
     type:"string"
-  })},commitRepo)
+  })},(argv)=>{
+  commitRepo(argv.message);
+})
 
 .command("push","Push the file to S3",{},pushRepo)
 

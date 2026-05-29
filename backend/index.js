@@ -8,7 +8,7 @@ const {pushRepo} = require("./controllers/push")
 const {pullRepo} = require("./controllers/pull")
 const {revertRepo} = require("./controllers/revert")
 
-const argv = yargs(hideBin(process.argv))
+yargs(hideBin(process.argv))
 .command("init","initialize a new Repository",{},initRepo)
 
 .command("add <file>","Add a file to the Repository",

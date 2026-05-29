@@ -1,35 +1,3 @@
-// const fs = require("fs").promises
-// const path = require("path")
-// const {promisify} = require("util")
-
-// const readdir = promisify(fs.readdir);
-// const copyFile = promisify(fs.copyFile);
-
-// async function revertRepo(commitId){
-//     const repoPath = path.resolve(process.cwd() , ".devRift")
-//     const commitsPath = path.join(repoPath , "commits")
-
-//     try{
-//         const commitDir = path.join(commitsPath,commitId);
-
-//         const files = await readdir(commitDir);
-//         const parentDir = process.cwd();
-
-//         for(const file of files){
-//             await copyFile(path.join(commitDir , file) , path.join(parentDir,file))
-//         }
-//         console.log(`commit ${commitId} reverted successfully !!`)
-//     }
-//     catch(err){
-//         console.error("error in revert " , err)
-//     }
-// }
-
-// module.exports = {revertRepo};
-
-
-
-
 const fs = require("fs");
 const path = require("path");
 const { promisify } = require("util");

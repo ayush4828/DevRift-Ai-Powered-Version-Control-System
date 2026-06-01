@@ -2,15 +2,13 @@ const mongoose = require("mongoose");
 const {Schema} = mongoose;
 
 const RepoSchema = new Schema({
-  timestamps: true,
-  
   name: {
     type: String,
     required: true,
     unique: true,
   },
 
-    description: {
+  description: {
     type: String,
   },
 

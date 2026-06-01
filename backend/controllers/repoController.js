@@ -1,25 +1,31 @@
-const createRepository = (req,res)=>{
-    res.send("repo created successfully");
+const mongoose = require("mongoose");
+const Repository = require("../model/repoModel");
+const User = require("../model/userModel");
+const Issue = require("../model/issueModel");
+
+
+const createRepository = async(req,res)=>{
+    
 }
-const getAllRepositories = (req,res)=>{
+const getAllRepositories = async(req,res)=>{
     res.send("all repos fetched success!");
 }
-const fetchRepositoryById = (req,res)=>{
+const fetchRepositoryById = async(req,res)=>{
     res.send("repo fetch by id successfully");
 }
-const fetchRepositoryByName = (req,res)=>{
+const fetchRepositoryByName = async(req,res)=>{
     res.send("repo fetch by name successfully");
 }
-const fetchRepositoriesForCurrentUser = (req,res)=>{
+const fetchRepositoriesForCurrentUser = async(req,res)=>{
     res.send("repo fetch for logged in user successfully");
 }
-const updateRepositoryById = (req,res)=>{
+const updateRepositoryById = async(req,res)=>{
     res.send("repo updated successfully");
 }
-const toggleVisibilityById = (req,res)=>{
+const toggleVisibilityById = async(req,res)=>{
     res.send("repo vissibility toggled");
 }
-const deleteRepositoryById = (req,res)=>{
+const deleteRepositoryById = async(req,res)=>{
     res.send("repo deleted successfully");
 }
 

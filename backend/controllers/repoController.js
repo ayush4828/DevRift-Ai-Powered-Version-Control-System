@@ -37,13 +37,32 @@ const createRepository = async(req,res)=>{
   }
 }
 const getAllRepositories = async(req,res)=>{
-    res.send("all repos fetched success!");
+    try{
+        const repositories = await Repository.find({}).populate("owner").populate("issues");
+        res.json(repositories);
+    }
+    catch (err) {
+    console.error("Error during fetching the repositories : ", err.message);
+    res.status(500).send("Server error");
+  }
 }
 const fetchRepositoryById = async(req,res)=>{
-    res.send("repo fetch by id successfully");
+    const repoId = req.params.id
+    try{
+        const repository = await Repository.findById(repoId).populate("owner").populate("issues");
+        if(!repository){
+            return res.status(404).json({message:"User Not Found!!"})
+        }
+        res.json(repository);
+    }
+    catch (err) {
+    console.error("Error during fetching the repositories : ", err.message);
+    res.status(500).send("Server error");
+    }
+
 }
 const fetchRepositoryByName = async(req,res)=>{
-    res.send("repo fetch by name successfully");
+
 }
 const fetchRepositoriesForCurrentUser = async(req,res)=>{
     res.send("repo fetch for logged in user successfully");

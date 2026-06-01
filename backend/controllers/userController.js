@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const {MongoClient} = require("mongodb");
 const dotenv = require("dotenv").config();
-const objectId = require("mongodb").ObjectId;
+const ObjectId = require("mongodb").ObjectId;
 
 let client;
 const uri = process.env.MONGO_URI;
@@ -95,8 +95,26 @@ const getAllUsers = async(req,res)=>{
 
 }
 
-const getUserProfile = (req,res)=>{
-    res.send("user profile fetched");
+const getUserProfile = async(req,res)=>{
+    const currId= req.params.id;
+    try{
+    await connectClient();
+    const db = client.db("devrift");
+    const usersCollection = db.collection("users");
+    
+    const user = await usersCollection.findOne({
+        _id : new ObjectId(currId),
+    }); 
+    
+    if(!user){
+        return res.status(404).json({message:"User Not Found!!"})
+    }
+    res.send(user)
+    }
+    catch(err){
+      console.error("Error During fetching : " , err.message);
+      res.status(500).send("server error");
+    }    
 }
 const updateUserProfile = (req,res)=>{
     res.send("user profile updated sucessfully");

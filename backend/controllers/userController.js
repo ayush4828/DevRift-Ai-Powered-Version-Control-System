@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const {MongoClient} = require("mongodb");
 const dotenv = require("dotenv").config();
+const objectId = require("mongodb").ObjectId;
 
 let client;
 const uri = process.env.MONGO_URI;
@@ -78,8 +79,20 @@ const login = async(req,res)=>{
 
 }
 
-const getAllUsers = (req,res)=>{
-    res.send("all users fetched");
+const getAllUsers = async(req,res)=>{
+    try{
+    await connectClient();
+    const db = client.db("devrift");
+    const usersCollection = db.collection("users");
+    const users = await usersCollection.find({}).toArray();
+    res.json(users)
+
+    }
+    catch(err){
+      console.error("Error During the Login : " , err.message);
+      res.status(500).send("server error");
+    }
+
 }
 
 const getUserProfile = (req,res)=>{

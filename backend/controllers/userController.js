@@ -42,7 +42,7 @@ const signUp = async(req,res)=>{
    let result = await usersCollection.insertOne(newUser);
 
    const token = jwt.sign({id:result.insertId},process.env.JWT_SECRET_KEY,{expiresIn:"1h"})
-   res.json({token});
+   res.json({token,userId:result.insertId});
     }
     catch(err){
       console.error("Error During the SignUp : " , err.message)
@@ -50,8 +50,32 @@ const signUp = async(req,res)=>{
     }
 
 }
-const login = (req,res)=>{
-    res.send("login successfull!!");
+const login = async(req,res)=>{
+     const {email,password} = req.body;
+    try{
+    await connectClient();
+    const db = client.db("devrift");
+    const usersCollection = db.collection("users");
+    
+    const user = await usersCollection.findOne({email}); 
+    
+    if(!user){
+        return res.status(400).json({message:"Invalid Credential!!"})
+    }
+    
+    const isMatch = await bcrypt.compare(password,user.password)
+    if(!isMatch){
+        return res.status(400).json({message:"Invalid Credential!!"})
+    }
+
+   const token = jwt.sign({id:user._id},process.env.JWT_SECRET_KEY,{expiresIn:"1h"})
+   res.json({token,userId:user._id});
+    }
+    catch(err){
+      console.error("Error During the Login : " , err.message);
+      res.status(500).send("server error");
+    }
+
 }
 
 const getAllUsers = (req,res)=>{

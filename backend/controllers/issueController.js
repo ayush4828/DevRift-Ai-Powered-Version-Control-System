@@ -60,6 +60,20 @@ const deleteIssueById = async(req,res)=>{
   }
 }
 
+const getAllIssues = async(req,res)=>{
+   const repoId = req.params.id;
+   try{
+    const issues = await Issue.find({repository:repoId});
+    if(!issues){
+        return res.status(404).json({message:"issues Not Found!!"});
+    }
+    res.status(200).json(issues);
+   }catch (err) {
+    console.error("Error during issue fetching : ", err.message);
+    res.status(500).send("Server error");
+} }
+
+
 module.exports = {
 createIssue,
 updateIssueById,

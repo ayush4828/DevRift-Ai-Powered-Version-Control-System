@@ -44,7 +44,23 @@ const updateIssueById = async(req,res)=>{
   }
 }
 
-module. exports = {
+const deleteIssueById = async(req,res)=>{
+    const id = req.params.id;
+    
+    try{
+        const issue = await Issue.findByIdAndDelete(id);
+        if(!issue){
+             return res.status(404).json({message:"Issue Not Found!!"})
+        }
+        
+        res.json({message:"Issue Deleted Successfully!! "});
+     } catch (err) {
+    console.error("Error during issue Deletion : ", err.message);
+    res.status(500).send("Server error");
+  }
+}
+
+module.exports = {
 createIssue,
 updateIssueById,
 deleteIssueById,

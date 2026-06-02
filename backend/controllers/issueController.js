@@ -72,7 +72,23 @@ const getAllIssues = async(req,res)=>{
     console.error("Error during issue fetching : ", err.message);
     res.status(500).send("Server error");
 } }
+const getIssueById = async(req,res)=>{
+    const issueId = req.params.id;
 
+    try{
+
+        const issue = await Issue.findById(issueId);
+
+        if(!issue){
+            return res.status(404).json({message:"Issue Not Found!!"});
+        }
+        res.status(200).json(issue)
+
+    }catch (err) {
+    console.error("Error during issue fetching : ", err.message);
+    res.status(500).send("Server error");
+}
+}
 
 module.exports = {
 createIssue,

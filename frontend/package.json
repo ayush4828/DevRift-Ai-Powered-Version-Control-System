@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@primer/css": "^22.2.0",
     "@primer/react": "^38.26.0",
     "axios": "^1.17.0",
     "react": "^19.2.6",

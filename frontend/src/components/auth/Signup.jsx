@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import  { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../authContext";
 
-import { PageHeader } from "@primer/react/drafts";
-import { Box, Button } from "@primer/react";
+import "@primer/css/dist/primer.css";
+import { PageHeader } from "@primer/react";
+import { Button } from "@primer/react";
 import "./auth.css";
 
 import logo from "../../assets/devrift_icon_transparent.svg";
@@ -22,7 +23,7 @@ const Signup = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:3002/signup", {
+      const res = await axios.post("http://localhost:3000/signup", {
         email: email,
         password: password,
         username: username,
@@ -50,13 +51,13 @@ const Signup = () => {
 
       <div className="login-box-wrapper">
         <div className="login-heading">
-          <Box sx={{ padding: 1 }}>
+          <div style={{ padding: "4px" }}>
             <PageHeader>
               <PageHeader.TitleArea variant="large">
                 <PageHeader.Title>Sign Up</PageHeader.Title>
               </PageHeader.TitleArea>
             </PageHeader>
-          </Box>
+          </div>
         </div>
 
         <div className="login-box">

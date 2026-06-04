@@ -1,9 +1,13 @@
 .login-wrapper {
     color: #f1f6fd;
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
+    overflow-y: auto;
     font-family: "Asap", sans-serif;
     background-color: #0c1116;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
   }
   
   .login-logo-container {

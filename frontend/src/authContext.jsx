@@ -13,6 +13,7 @@ export const AuthProvider = ({children}) => {
      const userId = localStorage.getItem('userId');
      if(userId){
       setcurrentUser(userId);
+         
      }
    },[]);
 

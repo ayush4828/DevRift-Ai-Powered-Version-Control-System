@@ -12,8 +12,7 @@ export const AuthProvider = ({children}) => {
    useEffect(()=>{
      const userId = localStorage.getItem('userId');
      if(userId){
-      setcurrentUser(userId);
-         
+      setCurrentUser(userId);
      }
    },[]);
 

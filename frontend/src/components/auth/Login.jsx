@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import  { useState ,useEffect} from "react";
 import axios from "axios";
 import { useAuth } from "../../authContext";
 
@@ -13,8 +13,13 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { currentUser , setCurrentUser } = useAuth();
 
-  const { setCurrentUser } = useAuth();
+    // useEffect(() => {
+    //    localStorage.removeItem("token");
+    //    localStorage.removeItem("userId");
+    //    setCurrentUser(null);
+    // })
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -40,6 +45,7 @@ const Login = () => {
     }
   };
 
+
   return (
     <div className="login-wrapper">
       <div className="login-logo-container">
@@ -51,7 +57,7 @@ const Login = () => {
           <div style={{ padding: "4px" }}>
             <PageHeader>
               <PageHeader.TitleArea variant="large">
-                <PageHeader.Title>Login</PageHeader.Title>
+                <PageHeader.Title>Sign in</PageHeader.Title>
               </PageHeader.TitleArea>
             </PageHeader>
           </div>

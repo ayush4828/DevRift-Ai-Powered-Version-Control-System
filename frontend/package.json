@@ -12,6 +12,7 @@
   "dependencies": {
     "@primer/css": "^22.2.0",
     "@primer/react": "^38.26.0",
+    "@uiw/react-heat-map": "^2.3.4",
     "axios": "^1.17.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",

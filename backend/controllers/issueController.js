@@ -11,7 +11,7 @@ const createIssue = async(req,res)=>{
     const issue = new Issue({
       title,
       description,
-      repository: id,
+      repository: repoId,
     });
 
     await issue.save();

@@ -169,7 +169,7 @@ const deleteUserProfile=async(req,res)=>{
         _id:new ObjectId(currId)
     })
 
-    if(result.deleteCount == 0){
+    if(result.deletedCount == 0){
         return res.status(404).json({message:"User Not Found!!"})
     }
     res.json({message:"User Profile Deleted!!"})

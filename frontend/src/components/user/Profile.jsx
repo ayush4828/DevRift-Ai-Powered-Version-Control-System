@@ -5,7 +5,7 @@ import "./profile.css";
 import Navbar from "../Navbar";
 import { UnderlineNav } from "@primer/react";
 import { BookIcon, RepoIcon } from "@primer/octicons-react";
-import HeatMapProfile from "./HeatMap";
+import HeatMapProfile from "./HeatMapProfile";
 import { useAuth } from "../../authContext";
 
 
@@ -21,7 +21,7 @@ const Profile = () => {
       if (userId) {
         try {
           const response = await axios.get(
-            `http://localhost:3002/userProfile/${userId}`
+            `http://localhost:3000/userprofile/${userId}`
           );
           setUserDetails(response.data);
         } catch (err) {

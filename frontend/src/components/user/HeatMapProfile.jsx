@@ -48,22 +48,7 @@ const HeatMapProfile = () => {
   }, []);
 
   return (
-    <div>
-      <h4>Recent Contributions</h4>
-      <HeatMap
-        className="HeatMapProfile"
-        style={{ maxWidth: "700px", height: "200px", color: "white" }}
-        value={activityData}
-        weekLabels={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
-        startDate={new Date("2001-01-01")}
-        rectSize={15}
-        space={3}
-        rectProps={{
-          rx: 2.5,
-        }}
-        panelColors={panelColors}
-      />
-    </div>
+    
   );
 };
 

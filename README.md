@@ -548,11 +548,11 @@ npm install -g devrift
 ### Quick Start
 
 ```bash
-# 1. Authenticate
-devrift login --email your@email.com --password yourpassword
-
-# 2. Initialize in your project directory
+# 1. Initialize in your project directory (creates .devRift/ config)
 devrift init <repoId>
+
+# 2. Authenticate (saves token to .devRift/config.json)
+devrift login --email your@email.com --password yourpassword
 
 # 3. Stage files
 devrift add .
@@ -569,6 +569,8 @@ devrift pull
 # 7. Revert to a specific commit
 devrift revert <commitId>
 ```
+
+> **Note:** `devrift init` must be run before `devrift login`, as login saves credentials to the `.devRift/config.json` file created by init.
 
 ### How It Works Locally
 
@@ -755,7 +757,7 @@ your-project/
               ▼                               ▼
     ┌──────────────────┐           ┌──────────────────┐
     │  Frontend (CDN)  │           │  Backend (EC2)   │
-    │  Vercel/Netlify  │           │  api.devrift.in  │
+    │  AWS Amplify     │           │  api.devrift.in  │
     │                  │           │                  │
     │  React + Vite    │──────────►│  Node.js Express │
     │  Static Build    │  API      │  + Socket.IO     │
@@ -791,13 +793,18 @@ pm2 save
 pm2 startup
 ```
 
-### Deploy Frontend
+### Deploy Frontend (AWS Amplify)
 
-```bash
-cd frontend
-npm run build   # Generates dist/ folder
-# Deploy dist/ to Vercel, Netlify, or any static host
-```
+1. Go to [AWS Amplify Console](https://console.aws.amazon.com/amplify)
+2. Click **"New app"** → **"Host web app"**
+3. Connect your GitHub repository
+4. Set build settings:
+   - **Build command:** `npm run build`
+   - **Build output directory:** `dist`
+   - **Base directory:** `frontend`
+5. Add environment variable:
+   - `VITE_API_URL` = `https://api.devrift.in`
+6. Deploy — Amplify auto-builds on every push to `main`
 
 ---
 

@@ -18,9 +18,7 @@ async function revertRepo(commitID) {
       await copyFile(path.join(commitDir, file), path.join(parentDir, file));
     }
 
-    console.log(`Commit ${commitID} reverted successfully!`);
   } catch (err) {
-    console.error("Unable to revert : ", err);
   }
 }
 

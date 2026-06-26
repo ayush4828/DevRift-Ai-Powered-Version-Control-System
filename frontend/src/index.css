@@ -1,111 +1,172 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    background-color: #131318; /* surface */
+    color: #e4e1e9; /* on-surface */
+    overflow-x: hidden;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+@layer utilities {
+  .glass-panel {
+    background: rgba(22, 27, 34, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(48, 54, 61, 0.5);
   }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  .neon-glow:focus-within {
+    border-color: #afecff;
+    box-shadow: 0 0 8px rgba(175, 236, 255, 0.3);
   }
-}
-
-body {
-  margin: 0;
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+  .grid-pattern {
+    background-image: radial-gradient(circle, #30363d 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.15;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #3c494d;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #afecff;
   }
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+
+/* =============================================
+   1. PAGE TRANSITION
+   ============================================= */
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
-p {
-  margin: 0;
+
+.page-transition-wrapper {
+  animation: pageEnter 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  min-height: 100%;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
+/* =============================================
+   2. STAGGERED FEED CARDS
+   ============================================= */
+@keyframes feedCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.feed-card-animated {
+  opacity: 0;
+  animation: feedCardEnter 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* =============================================
+   3. STAR BURST PARTICLES
+   ============================================= */
+@keyframes starParticle {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: var(--tx, translate(40px, -40px)) scale(0);
+  }
+}
+
+.star-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #afecff;
+  pointer-events: none;
+  animation: starParticle 0.6s ease-out forwards;
+  z-index: 50;
+}
+
+.star-btn-wrapper {
+  position: relative;
   display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
+/* =============================================
+   4. HEATMAP TILE GLOW ON HOVER
+   ============================================= */
+.heatmap-tile-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.heatmap-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1c2128;
+  border: 1px solid rgba(48, 54, 61, 0.8);
+  color: #e4e1e9;
+  font-size: 11px;
+  white-space: nowrap;
   padding: 4px 8px;
-  background: var(--code-bg);
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.heatmap-tile-wrapper:hover .heatmap-tooltip {
+  opacity: 1;
+}
+
+/* =============================================
+   5. AVATAR GLOWING BORDER RING
+   ============================================= */
+@keyframes avatarGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 2px rgba(175, 236, 255, 0.5),
+      0 0 18px rgba(175, 236, 255, 0.3),
+      0 0 35px rgba(175, 236, 255, 0.08);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px rgba(182, 0, 248, 0.6),
+      0 0 22px rgba(182, 0, 248, 0.35),
+      0 0 50px rgba(182, 0, 248, 0.1);
+  }
+}
+
+.avatar-glow {
+  animation: avatarGlow 3s ease-in-out infinite;
+}
+
+/* ConfirmModal scale-in animation */
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
 }

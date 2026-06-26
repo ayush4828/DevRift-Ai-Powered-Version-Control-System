@@ -20,6 +20,15 @@ const IssueSchema = new Schema({
         ref:"Repository",
         required:true
     },
+}, { timestamps: true });
+
+IssueSchema.pre('findOneAndDelete', async function() {
+    const issueId = this.getQuery()._id;
+
+    await mongoose.model('Repository').updateMany(
+        { issues: issueId },
+        { $pull: { issues: issueId } }
+    );
 });
 
 const Issue = mongoose.model("Issue",IssueSchema);

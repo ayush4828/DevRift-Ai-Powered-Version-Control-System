@@ -1,25 +1,40 @@
-const express = require("express");
-const dotenv = require("dotenv").config();
-const cors = require("cors");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const http = require("http");
-const { Server } = require("socket.io");
-const mainRouter = require("./routes/main.router");
+#!/usr/bin/env node
 
 const yargs = require("yargs");
 const { hideBin } = require("yargs/helpers");
 
-const { initRepo } = require("./controllers/init");
-const { addRepo } = require("./controllers/add");
-const { commitRepo } = require("./controllers/commit");
-const { pushRepo } = require("./controllers/push");
-const { pullRepo } = require("./controllers/pull");
-const { revertRepo } = require("./controllers/revert");
+// Controllers are loaded lazily to improve performance and prevent global side effects
 
 yargs(hideBin(process.argv))
   .command("start", "start a new server", {}, startServer)
-  .command("init", "initialize a new Repository", {}, initRepo)
+
+  .command(
+    "init [repoId]",
+    "Initialize a new Repository and link it to a DevRift repo",
+    (yargs) => {
+      yargs.positional("repoId", {
+        describe: "DevRift MongoDB Repository ID to link this folder to",
+        type: "string",
+        default: "",
+      });
+    },
+    (argv) => {
+      require("./controllers/init").initRepo(argv.repoId);
+    },
+  )
+
+  .command(
+    "login",
+    "Authenticate with DevRift and save your token locally",
+    (yargs) => {
+      yargs
+        .option("email",    { type: "string", description: "Your DevRift email",    demandOption: true })
+        .option("password", { type: "string", description: "Your DevRift password", demandOption: true });
+    },
+    (argv) => {
+      require("./controllers/loginCLI").loginCLI(argv);
+    },
+  )
 
   .command(
     "add <file>",
@@ -31,13 +46,13 @@ yargs(hideBin(process.argv))
       });
     },
     (argv) => {
-      addRepo(argv.file);
+      require("./controllers/add").addRepo(argv.file);
     },
   )
 
   .command(
     "commit <message>",
-    "commit the stagged file",
+    "commit the staged files",
     (yargs) => {
       yargs.positional("message", {
         describe: "Commit Message",
@@ -45,13 +60,13 @@ yargs(hideBin(process.argv))
       });
     },
     (argv) => {
-      commitRepo(argv.message);
+      require("./controllers/commit").commitRepo(argv.message);
     },
   )
 
-  .command("push", "Push the file to S3", {}, pushRepo)
+  .command("push", "Push commits to DevRift via the backend", {}, (argv) => require("./controllers/push").pushRepo())
 
-  .command("pull", "Pull commit from S3", {}, pullRepo)
+  .command("pull", "Pull commits from S3", {}, (argv) => require("./controllers/pull").pullRepo())
 
   .command(
     "revert <commitId>",
@@ -63,7 +78,7 @@ yargs(hideBin(process.argv))
       });
     },
     (argv) => {
-      revertRepo(argv.commitId);
+      require("./controllers/revert").revertRepo(argv.commitId);
     },
   )
 
@@ -71,6 +86,15 @@ yargs(hideBin(process.argv))
   .help().argv;
 
 function startServer() {
+  const express = require("express");
+  require("dotenv").config();
+  const cors = require("cors");
+  const mongoose = require("mongoose");
+  const bodyParser = require("body-parser");
+  const http = require("http");
+  const { Server } = require("socket.io");
+  const mainRouter = require("./routes/main.router");
+
   const app = express();
   const port = process.env.PORT || 3000;
 
@@ -82,40 +106,40 @@ function startServer() {
   mongoose
     .connect(mongoURI)
     .then(() => {
-      console.log("MongoDB Connected Successfully");
     })
     .catch((err) => {
-      console.error("unable to Connect", err);
     });
 
-  app.use(cors({ origin: "*" }));
+  const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "https://www.devrift.in",
+  "http://localhost:5173"
+];
+
+app.use(cors({ origin: allowedOrigins }));
 
   app.use("/", mainRouter);
 
-  let user = "testUser";
   const httpServer = http.createServer(app);
   const io = new Server(httpServer, {
     cors: {
-      origin: "*",
+      origin: [process.env.CLIENT_URL, "https://www.devrift.in", "http://localhost:5173"],
       methods: ["GET", "POST"],
     },
   });
 
+  app.set("io", io);
+
   io.on("connection", (socket) => {
     socket.on("joinRoom", (userId) => {
-      user = userId;
-      console.log("=====");
-      console.log(user);
-      console.log("=====");
       socket.join(userId);
     });
   });
+
   const db = mongoose.connection;
   db.once("open", async () => {
-    console.log("crud operations called");
   });
 
   httpServer.listen(port, () => {
-    console.log(`Server is running on ${port}`);
   });
 }

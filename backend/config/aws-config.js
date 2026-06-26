@@ -9,4 +9,4 @@ AWS.config.update({
 const s3 = new AWS.S3();
 const S3_Bucket = process.env.S3_BUCKET;
 
-module.exports = {s3,S3_Bucket};
+module.exports = {s3,S3_Bucket};    
